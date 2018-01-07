@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>AzuraCast Now Playing Widget</title>
+	</head>
+	<body>
+        <div class="now-playing-widget">
+            <h1>Currently playing on <span class="station-name"></span></h1>
+            <div>
+                <span class="artist-name"></span> - <span class="track-name"></span>
+            </div>
+            <img class="album-art"></img>
+        </div>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/axios/0.17.0/axios.js"></script>
+		<script type="text/javascript">
+
+        // location of the AzuraCast API .
+		var stationAPILocation = 'http://andromeda.housejunkie.ca/api/nowplaying/1';
+
+		var stationName = document.querySelector('.station-name');
+		var artistName = document.querySelector('.artist-name');
+		var trackName = document.querySelector('.track-name');
+		var albumArt = document.querySelector('.album-art');
+        var nowPlayingWidget = document.querySelector('.now-playing-widget');
+
+		axios.get(stationAPILocation)
+		  .then(function (response) {
+			stationName.innerHTML = response.data.station.name;
+			artistName.innerHTML = response.data.now_playing.song.artist;
+			trackName.innerHTML = response.data.now_playing.song.title;
+			albumArt.src = response.data.now_playing.song.art;
+		  })
+          // default catchall error handling, in the event of a GET failure.
+		  .catch(function (error) {
+              nowPlayingWidget.innerHTML = '<b>Unable to load now playing data</b>';
+		  });
+
+		</script>
+	</body>
+</html>
